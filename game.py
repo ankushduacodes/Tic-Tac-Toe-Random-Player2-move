@@ -10,19 +10,19 @@ class Player():
         self.marker = marker
 
 
-board_list = [' '] * 10
+board = [' '] * 10
 
 
 def generate_board():
     os.system('clear')
     print('     |     |     ')
-    print(f'  {board_list[1]}  |  {board_list[2]}  |  {board_list[3]}  ')
+    print(f'  {board[1]}  |  {board[2]}  |  {board[3]}  ')
     print('_____|_____|_____')
     print('     |     |     ')
-    print(f'  {board_list[4]}  |  {board_list[5]}  |  {board_list[6]}  ')
+    print(f'  {board[4]}  |  {board[5]}  |  {board[6]}  ')
     print('_____|_____|_____')
     print('     |     |     ')
-    print(f'  {board_list[7]}  |  {board_list[8]}  |  {board_list[9]}  ')
+    print(f'  {board[7]}  |  {board[8]}  |  {board[9]}  ')
     print('     |     |     ')
 
 
@@ -39,19 +39,27 @@ def assign_marker(p1, p2):
 
 def check_if_empty(position):
 
-    return board_list[position] == ' '
+    return board[position] == ' '
 
 
 def is_board_full():
+    
+    """[summary]
+
+    Returns:
+        [type]: [description]
+    """
 
     empty_pos_list = []
 
     for i in range(1, 10):
         if check_if_empty(i):
             empty_pos_list.append(i)
-            return (False, empty_pos_list)
 
-    return (True, empty_pos_list)
+    if empty_pos_list:
+        return (False, empty_pos_list)
+    else:
+        return (True, empty_pos_list)
 
 
 def has_won(marker):
@@ -64,24 +72,13 @@ def has_won(marker):
         [bool]
     """
 
-    return (
-        # first row
-        board_list[1] == board_list[2] == board_list[3] == marker or
-        # second row
-        board_list[4] == board_list[5] == board_list[6] == marker or
-        # third row
-        board_list[7] == board_list[8] == board_list[9] == marker or
-        # first column
-        board_list[1] == board_list[4] == board_list[7] == marker or
-        # second column
-        board_list[2] == board_list[5] == board_list[8] == marker or
-        # third column
-        board_list[3] == board_list[6] == board_list[9] == marker or
-        # first diagonal
-        board_list[1] == board_list[5] == board_list[9] == marker or
-        # second diagonal
-        board_list[3] == board_list[5] == board_list[7] == marker
-    )
+    winning_positions_list = [[1,2,3], [4,5,6], [7,8,9], [1,4,7], [2,5,8], [3,6,9], [1,5,9], [3,5,7]]
+    
+    for winning_positions in winning_positions_list:
+        if board[winning_positions[0]] == board[winning_positions[1]] == board[winning_positions[2]] == marker:
+            return True
+    return False
+
 
 
 def play():
@@ -99,5 +96,3 @@ def main():
 if __name__ == "__main__":
     os.system('clear')
     main()
-
-
