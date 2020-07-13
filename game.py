@@ -1,5 +1,10 @@
 import os
-from random import randint
+import random
+
+
+class PositionAlreadyFullError(Exception):
+    def init(self):
+        pass
 
 
 class Player():
@@ -14,7 +19,7 @@ board = [' '] * 10
 
 
 def generate_board():
-    os.system('clear')
+    # os.system('clear')
     print('     |     |     ')
     print(f'  {board[1]}  |  {board[2]}  |  {board[3]}  ')
     print('_____|_____|_____')
@@ -42,24 +47,28 @@ def check_if_empty(position):
     return board[position] == ' '
 
 
+def return_empty_positions(board):
+
+    empty_positions_list = []
+
+    for position in range(1, 10):
+        if check_if_empty(position):
+            empty_positions_list.append(position)
+
+    return empty_positions_list
+
+
 def is_board_full():
-    
     """[summary]
 
     Returns:
         [type]: [description]
     """
 
-    empty_pos_list = []
-
-    for i in range(1, 10):
-        if check_if_empty(i):
-            empty_pos_list.append(i)
-
-    if empty_pos_list:
-        return (False, empty_pos_list)
-    else:
-        return (True, empty_pos_list)
+    for position in range(1, 10):
+        if check_if_empty(position):
+            return False
+    return True
 
 
 def has_won(marker):
@@ -72,13 +81,18 @@ def has_won(marker):
         [bool]
     """
 
-    winning_positions_list = [[1,2,3], [4,5,6], [7,8,9], [1,4,7], [2,5,8], [3,6,9], [1,5,9], [3,5,7]]
-    
+    winning_positions_list = [[1, 2, 3], [4, 5, 6], [7, 8, 9], [
+        1, 4, 7], [2, 5, 8], [3, 6, 9], [1, 5, 9], [3, 5, 7]]
+
     for winning_positions in winning_positions_list:
         if board[winning_positions[0]] == board[winning_positions[1]] == board[winning_positions[2]] == marker:
             return True
     return False
 
+
+def update_board(position, marker):
+
+    board[position] = marker
 
 
 def play():
@@ -86,7 +100,49 @@ def play():
     player2 = Player(name='Computer')
     player1.name = input('Player1, Enter you name: ')
     assign_marker(player1, player2)
-    generate_board()
+
+    player1_go = False
+
+    while True:
+        generate_board()
+        if not player1_go:
+            while True:
+                try:
+                    position = int(input(
+                        f'{player1.name}, Please choose your position(from 1-9): '))
+                    if position not in range(1, 10):
+                        raise IndexError
+                    if not check_if_empty(position):
+                        raise PositionAlreadyFullError
+
+                except PositionAlreadyFullError:
+                    print(
+                        'The position is already full, Please choose another position')
+                except ValueError:
+                    print('Oops!.. you entered an invalid input')
+                except IndexError:
+                    print('Oops!.. you entered an invalid Position')
+                except Exception:
+                    print("Something went wrong")
+                else:
+                    update_board(position, player1.marker)
+                    player1_go = not player1_go
+                    break
+
+            if has_won(player1.marker):
+                generate_board()
+                print(f'Congratulations! {player1.name} has won')
+                break
+
+            if is_board_full():
+                generate_board()
+                print('The match was a tie')
+                break
+        else:
+            empty_pos_list = return_empty_positions(board)
+            player2_move = random.choice(empty_pos_list)
+            update_board(player2_move, player2.marker)
+            player1_go = not player1_go
 
 
 def main():
@@ -94,5 +150,5 @@ def main():
 
 
 if __name__ == "__main__":
-    os.system('clear')
+    # os.system('clear')
     main()
