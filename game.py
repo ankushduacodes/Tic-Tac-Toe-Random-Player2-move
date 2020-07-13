@@ -19,7 +19,7 @@ board = [' '] * 10
 
 
 def generate_board():
-    # os.system('clear')
+    os.system('clear')
     print('     |     |     ')
     print(f'  {board[1]}  |  {board[2]}  |  {board[3]}  ')
     print('_____|_____|_____')
@@ -155,10 +155,23 @@ def play():
                 break
 
 
+def replay():
+
+    replay_input = input('Do you want to play again(y or n): ').upper()
+    while replay_input not in ['Y', 'N']:
+        replay_input = input('Please enter a valid input(y or n): ').upper()
+
+    return replay_input == 'Y'
+
+
 def main():
     play()
+    while replay():
+        global board
+        board = [' '] * 10
+        play()
 
 
 if __name__ == "__main__":
-    # os.system('clear')
+    os.system('clear')
     main()
