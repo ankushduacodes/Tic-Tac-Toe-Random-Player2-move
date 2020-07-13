@@ -144,6 +144,16 @@ def play():
             update_board(player2_move, player2.marker)
             player1_go = not player1_go
 
+            if has_won(player2.marker):
+                generate_board()
+                print(f'{player2.name} has won')
+                break
+
+            if is_board_full():
+                generate_board()
+                print('The match was a tie')
+                break
+
 
 def main():
     play()
