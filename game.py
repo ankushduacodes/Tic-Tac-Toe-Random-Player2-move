@@ -15,7 +15,7 @@ class Player():
         self.marker = marker
 
 
-board = ['X'] * 10
+board = [' '] * 10
 
 
 def generate_board():
@@ -166,8 +166,8 @@ def play():
             player1_go = not player1_go
 
         else:
-            if player1_turn(player1)
-            break
+            if player1_turn(player1):
+                break
             player1_go = not player1_go
 
 
