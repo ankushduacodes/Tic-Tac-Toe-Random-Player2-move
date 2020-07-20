@@ -1,3 +1,5 @@
+#!/usr/local/bin/python3
+
 import os
 import random
 
@@ -19,6 +21,9 @@ board = [' '] * 10
 
 
 def generate_board():
+    """[Generates board for the players to be seen]
+    """
+
     os.system('clear')
     print('     |     |     ')
     print(f'  {board[1]}  |  {board[2]}  |  {board[3]}  ')
@@ -32,6 +37,12 @@ def generate_board():
 
 
 def assign_marker(p1, p2):
+    """[Assigns opposite markers to each player]
+
+    Args:
+        p1 ([Player class object])
+        p2 ([Player class object])
+    """
 
     marker = input(f'{p1.name}, Enter your choice (X or O): ').upper()
 
@@ -44,12 +55,28 @@ def assign_marker(p1, p2):
 
 
 def check_if_empty(position):
+    """ [Takes in position on the board and check if it is already filled or not
+    and returns True or False]
+
+    Args:
+        position ([int]): [position index in the board list]
+
+    Returns:
+        [bool]: [return True if position is empty space else False]
+    """
 
     return board[position] == ' '
 
 
 def return_empty_positions(board):
+    """[Returns a list of empty positions in the board]
 
+    Args:
+        board ([List])
+
+    Returns:
+        [List]: [contains positions in the [board] list that are empty]
+    """
     empty_positions_list = []
 
     for position in range(1, 10):
@@ -60,6 +87,8 @@ def return_empty_positions(board):
 
 
 def is_board_full():
+    """[Checks if the board is full or not]
+    """
 
     for position in range(1, 10):
         if check_if_empty(position):
@@ -68,6 +97,14 @@ def is_board_full():
 
 
 def has_won(marker):
+    """[Checking if player with [marker] (either X or O) has won or not]
+
+    Args:
+        marker ([str]): [either X or O]
+
+    Returns:
+        [bool]: [return True if a player with [marker] has won else False]
+    """
 
     winning_positions_list = [[1, 2, 3], [4, 5, 6], [7, 8, 9], [
         1, 4, 7], [2, 5, 8], [3, 6, 9], [1, 5, 9], [3, 5, 7]]
@@ -79,11 +116,29 @@ def has_won(marker):
 
 
 def update_board(position, marker):
+    """[Update the board list index at position parameter with marker]
+
+    Args:
+        position ([int]): [position index in the board list]
+        marker ([str]): [Either X or O]
+    """
 
     board[position] = marker
 
 
 def player1_turn(player1):
+    """[Updates the board with player1's marker]
+
+    Args:
+        player1 ([class Player])
+
+    Raises:
+        IndexError: [Raised if the entered position is not in range of 1 to 9 (including 9)]
+        PositionAlreadyFullError: [Raised if the entered poisition is already filled with a marker(either X or O)]
+
+    Returns:
+        [bool]: [returns True if a player1 has won or the board is full else False]
+    """
 
     generate_board()
     if not return_empty_positions(board):
@@ -122,11 +177,19 @@ def player1_turn(player1):
         print('The match was a tie')
         return True
 
-    else:
-        return False
+    return False
 
 
 def computer_turn(player2):
+    """[updates the board with player2's marker i.e computer]
+
+    Args:
+        player2 ([Player class object])
+
+    Returns:
+        [bool]: [returns True if a player1 has won or the board is full else False
+    """
+    
     generate_board()
     empty_pos_list = return_empty_positions(board)
     try:
@@ -146,17 +209,19 @@ def computer_turn(player2):
         print('The match was a tie')
         return True
 
-    else:
-        return False
+    return False
 
 
 def play():
+    """[handles the logic of turns of each player]
+    """
 
     player1 = Player()
     player2 = Player(name='Computer')
     player1.name = input('Player1, Enter you name: ')
     assign_marker(player1, player2)
 
+    # boolean flag which is set to true when player1 makes its turn and set to false when player2 makes its turn
     player1_go = False
 
     while True:
@@ -172,7 +237,11 @@ def play():
 
 
 def replay():
+    """[Asks player if they want to play again]
 
+    Returns:
+        [bool]
+    """
     replay_input = input('Do you want to play again(y or n): ').upper()
     while replay_input not in ['Y', 'N']:
         replay_input = input('Please enter a valid input(y or n): ').upper()
